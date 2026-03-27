@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orientamento - StudyNow</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/png">
+  <link rel="stylesheet" href="../CSS/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body data-posts-path="Info_posts.json">
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="auth-modal" style="display:none;">
+    <div class="auth-modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Accedi</h2>
+        <button id="close-modal" class="close-modal">&times;</button>
+      </div>
+      <input type="text" id="email" placeholder="E-mail" />
+      <input type="password" id="password" placeholder="Password" />
+      <div class="auth-buttons">
+        <button id="submit-btn">Accedi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <header class="sidebar-header">
+      <img src="../images/logo.jpg" alt="Logo" />
+    </header>
+    <nav class="sidebar-nav">
+      <ul class="nav-list primary-nav">
+        <li class="nav-item">
+          <a href="..\Home.html" class="nav-link">
+            <span class="material-symbols-rounded">home</span>
+            <span class="nav-label">Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="Dashboard_Afm.html" class="nav-link">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-list secondary-nav" style="margin-top:auto;"></ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div id="section-Info_AFM" class="section main-content"></div>
+
+  <script src="../Javascript/script.js"></script>
+  <script>
+fetch("Info_AFM_posts.json")
+    .then(res => res.json())
+    .then(posts => {
+        const div = document.getElementById("section-Info_AFM");
+        if(div) {
+            div.innerHTML = posts.map(p => `
+            <div class="post">
+                <h3>${p.title}</h3>
+                <p>${p.content}</p>
+            </div>`).join("");
+        }
+    })
+    .catch(err => console.error("Errore caricamento materia:", err));
+</script>
+
+
+<script>
+(function() {
+    const path = window.location.pathname.split("/").filter(Boolean);
+
+    const projectFolder = path[0];
+
+    const scriptPath = "/" + projectFolder + "/Javascript/global.js";
+
+    const script = document.createElement("script");
+    script.src = scriptPath;
+    document.body.appendChild(script);
+
+    window.__BASE_URL = "/" + projectFolder + "/";
+})();
+</script>
+
+
+</body>
+</html>

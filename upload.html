@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orientamento - StudyNow</title>
+  <link rel="icon" href="images/logo.jpg" type="image/png">
+  <link rel="stylesheet" href="CSS/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="auth-modal" style="display:none;">
+    <div class="auth-modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Accedi</h2>
+        <button id="close-modal" class="close-modal">&times;</button>
+      </div>
+      <input type="text" id="email" placeholder="E-mail" />
+      <input type="password" id="password" placeholder="Password" />
+      <div class="auth-buttons">
+        <button id="submit-btn">Accedi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <header class="sidebar-header">
+      <img src="images/logo.jpg" alt="Logo" class="logo"/>
+      <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
+    </header>
+    <nav class="sidebar-nav">
+      <ul class="nav-list primary-nav">
+        <li class="nav-item">
+          <a href="Home.html" class="nav-link">
+            <span class="material-symbols-rounded">home</span>
+            <span class="nav-label">Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+
+      </ul>
+      <ul class="nav-list secondary-nav" style="margin-top:auto;"></ul>
+    </nav>
+  </aside>
+
+  <!-- Upload Section -->
+  <div id="upload-section" class="section upload-section">
+    <div class="upload-card">
+      <h3>Carica Contenuti</h3>
+      <input type="text" class="upload-title" placeholder="Titolo..." />
+      <textarea class="upload-desc" placeholder="Descrizione..."></textarea>
+      <input type="file" class="upload-file" name="files[]" multiple />
+      <div class="upload-preview" style="display:none;">
+        <img id="preview-img" alt="Anteprima" />
+      </div>
+      <select id="sector" class="upload-destination" required>
+        <option value="">Seleziona il settore</option>
+      </select>
+
+      <select id="subject" name="subject" required>
+        <option value="">Seleziona la materia</option>
+      </select>
+
+      <button class="upload-btn">Carica</button>
+    </div>
+  </div>
+
+  <script src="Javascript/script2.js"></script>
+<script>
+// SETTORI REALI
+const sectors = {
+  "Amministrazione,_finanza_e_marketing": [
+    { value: "Econ_aziend", label: "Economia Aziendale" },
+    { value: "Diritto", label: "Diritto" },
+    { value: "Info_AFM", label: "Informatica" },
+    { value: "Second_ling_com_AFM", label: "Seconda Lingua Comunitaria" },
+    { value: "Econ_pol", label: "Economia Politica" }
+  ],
+
+  "Turismo": [
+    { value: "Geog_tur", label: "Geografia Turistica" },
+    { value: "Second_ling_com", label: "Seconda Lingua Comunitaria" },
+    { value: "Terz_ling_com", label: "Terza Lingua Comunitaria" },
+    { value: "Info_Tur", label: "Informatica" },
+    { value: "Disci_tur_aziend", label: "Discipline Turistiche Aziendali" },
+    { value: "Arte_terri", label: "Arte e Territorio" },
+    { value: "Econ_aziend", label: "Economia Aziendale" },
+    { value: "Diritto_legis_tur", label: "Diritto e Legislazione Turistica" }
+  ],
+
+  "Costruzione,_ambiente_e_territorio": [
+    { value: "Topo", label: "Topografia" },
+    { value: "Geop_ecom_est", label: "Geopedologia ed Economia Estimativa" },
+    { value: "Prog_costr_imp", label: "Progettazione Costruzioni e Impianti" },
+    { value: "Gest_cant_sicur_lav", label: "Gestione del Cantiere e Sicurezza" }
+  ],
+
+  "Informatica_e_telecomunicazioni": [
+    { value: "Sist_Reti", label: "Sistemi e Reti" },
+    { value: "Info", label: "Informatica" },
+    { value: "Tpsi", label: "Tecnologie e progettazione di sistemi informatici e di telecomunicazioni" },
+    { value: "Telec", label: "Telecomunicazioni" },
+    { value: "Gest_prog", label: "Gestione Progetto, organizzazione d'impresa" }
+  ],
+
+  "Grafica_e_comunicazione": [
+    { value: "Lab_tecn", label: "Laboratori Tecnici" },
+    { value: "Teor_com", label: "Teoria della Comunicazione" },
+    { value: "Proget_mult", label: "Progettazione Multimediale" },
+    { value: "Tecn_prog_prod", label: "Tecnologie e Processi di Produzione" },
+    { value: "Orga_gest_proc_prod", label: "Organizzazione e Gestione Processi Produttivi" }
+  ],
+
+  "Trasporti_e_logistica": [
+    { value: "Logistica", label: "Logistica" },
+    { value: "Scienze_nav", label: "Scienze della Navigazione" },
+    { value: "Mecca_macchi", label: "Meccanica e Macchine" }
+  ]
+};
+
+
+function prettyLabel(name){
+  return name.replace(/_/g," ").replace(/,/g,", ");
+}
+
+const sectorSelect = document.getElementById("sector");
+const subjectselect = document.getElementById("subject");
+
+sectorSelect.innerHTML = '<option value="">Seleziona il settore</option>';
+Object.keys(sectors).forEach(sec => {
+  const opt = document.createElement("option");
+  opt.value = sec;
+  opt.textContent = prettyLabel(sec);
+  sectorSelect.appendChild(opt);
+});
+
+sectorSelect.addEventListener("change", function(){
+  subjectselect.innerHTML = '<option value="">Seleziona la materia</option>';
+  const list = sectors[this.value] || [];
+  list.forEach(sub => {
+  const o = document.createElement("option");
+  o.value = sub.value;        // valore tecnico (immutabile)
+  o.textContent = sub.label;  // nome visibile (personalizzabile)
+  subjectselect.appendChild(o);
+});
+});
+
+fetch("PHP/upload.php", {
+    method: "POST",
+    body: fd
+})
+.then(r => r.json())   // <-- una volta corretto il PHP deve restare JSON
+.then(resp => {
+    console.log("RISPOSTA:", resp);
+    if(resp.status === "success") alert("Caricamento ok!");
+    else alert("Errore: " + resp.message);
+})
+.catch(err => console.error("Errore fetch:", err));
+
+</script>
+
+<script>
+(function() {
+    const path = window.location.pathname.split("/").filter(Boolean);
+
+    const projectFolder = path[0];
+
+    const scriptPath = "/" + projectFolder + "/Javascript/global.js";
+
+    const script = document.createElement("script");
+    script.src = scriptPath;
+    document.body.appendChild(script);
+
+    window.__BASE_URL = "/" + projectFolder + "/";
+})();
+</script>
+
+
+</body>
+</html>
