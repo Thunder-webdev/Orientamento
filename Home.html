@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
-
-   <!-- Auth Modal -->
+  
+  <!-- Auth Modal -->
   <div id="auth-modal" class="auth-modal" style="display:none;">
     <div class="auth-modal-content">
       <div class="modal-header">
@@ -25,13 +25,13 @@
     </div>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <header class="sidebar-header">
+  <!-- Navbar -->
+  <aside class="navbar" id="navbar">
+    <header class="navbar-header">
       <img src="./images/logo.jpg" alt="Logo" class="logo"/>
       <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
     </header>
-    <nav class="sidebar-nav">
+    <nav class="navbar-nav">
       <ul class="nav-list primary-nav">
         <li class="nav-item">
           <a href="Home.html" class="nav-link">
@@ -58,126 +58,102 @@
           <p class="subtitle">Scegli un settore per iniziare il tuo percorso.</p>
       </div>
       <div class="search-wrapper" id="searchWrapper">
-          <div class="search-content">
-              <div class="icon-search">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                  </svg>
-              </div>
-              <input type="text" class="search-input" id="searchInput" placeholder="Cerca settore..." autocomplete="off">
-              <div class="icon-close" id="iconClose">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-              </div>
-          </div>
+        <div class="search-content">
+           <div class="icon-search">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Cerca settore..." autocomplete="off">
+            <div class="icon-close" id="iconClose">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        </div>
       </div>
     </div>
-  <section class="sectors-grid">
 
-  <a href="./Amministrazione,_finanza_e_marketing/Dashboard_Afm.html" class="sector-card afm">
-    <div class="sector-img">
-      <img src="images/afm.png">
-    </div>
-    <div class="sector-info">
-      <h2>AFM</h2>
-      <p>Economia, marketing e gestione d’impresa.</p>
-    </div>
-  </a>
+    <div class="sectors-wrapper">
+      <section class="sectors-grid" id="carousel">
 
-  <a href="./Turismo/Dashboard_Tur.html" class="sector-card turismo">
-    <div class="sector-img">
-      <img src="images/turismo.png">
-    </div>
-    <div class="sector-info">
-      <h2>Turismo</h2>
-      <p>Accoglienza, lingue e territorio.</p>
-    </div>
-  </a>
+        <a href="./Amministrazione,_finanza_e_marketing/Dashboard_Afm.html" class="sector-card afm">
+          <div class="sector-img">
+            <img src="images/afm.png">
+          </div>
+          <div class="sector-info">
+            <h2>Amministrazione Finanza e Marketing</h2>
+            <p>Economia, marketing e gestione d’impresa.</p>
+          </div>
+        </a>
 
-  <a href="./Costruzione,_ambiente_e_territorio/Dashboard_Cat.html" class="sector-card cat">
-    <div class="sector-img">
-      <img src="images/cat.png">
-    </div>
-    <div class="sector-info">
-      <h2>CAT</h2>
-      <p>Edilizia, ambiente e territorio.</p>
-    </div>
-  </a>
+        <a href="./Turismo/Dashboard_Tur.html" class="sector-card turismo">
+          <div class="sector-img">
+            <img src="images/turismo.png">
+          </div>
+          <div class="sector-info">
+            <h2>Turismo</h2>
+            <p>Accoglienza, lingue e territorio.</p>
+          </div>
+        </a>
 
-  <a href="./Informatica_e_telecomunicazioni/Dashboard_Inf.html" class="sector-card informatica">
-    <div class="sector-img">
-      <img src="images/informatica.png">
-    </div>
-    <div class="sector-info">
-      <h2>Informatica</h2>
-      <p>Sistemi, reti e programmazione.</p>
-    </div>
-  </a>
+        <a href="./Trasporti_e_logistica/Dashboard_Trasp_Logi.html" class="sector-card trasporti">
+          <div class="sector-img">
+            <img src="images/nautico.png">
+          </div>
+          <div class="sector-info">
+            <h2>Trasporti e Logistica</h2>
+            <p>Mobilità, logistica e organizzazione.</p>
+          </div>
+        </a>
 
-  <a href="./Grafica_e_comunicazione/Dashboard_Graf.html" class="sector-card grafica">
-    <div class="sector-img">
-      <img src="images/grafica.png">
-    </div>
-    <div class="sector-info">
-      <h2>Grafica</h2>
-      <p>Design, video e comunicazione visiva.</p>
-    </div>
-  </a>
+        <a href="./Costruzione,_ambiente_e_territorio/Dashboard_Cat.html" class="sector-card cat">
+          <div class="sector-img">
+            <img src="images/cat.png">
+          </div>
+          <div class="sector-info">
+            <h2>Costruzione Ambiente e Territorio</h2>
+            <p>Edilizia, ambiente e territorio.</p>
+          </div>
+        </a>
 
-  <a href="./Trasporti_e_logistica/Dashboard_Trasp_Logi.html" class="sector-card trasporti">
-    <div class="sector-img">
-      <img src="images/nautico.png">
-    </div>
-    <div class="sector-info">
-      <h2>Trasporti e Logistica</h2>
-      <p>Mobilità, logistica e organizzazione.</p>
-    </div>
-  </a>
+        <a href="./Grafica_e_comunicazione/Dashboard_Graf.html" class="sector-card grafica">
+          <div class="sector-img">
+            <img src="images/grafica.png">
+          </div>
+          <div class="sector-info">
+            <h2>Grafica e Comunicazione</h2>
+            <p>Design, video e comunicazione visiva.</p>
+          </div>
+        </a>
 
-</section>
-</main>
+        <a href="./Informatica_e_telecomunicazioni/Dashboard_Inf.html" class="sector-card informatica">
+          <div class="sector-img">
+            <img src="images/informatica.png">
+          </div>
+          <div class="sector-info">
+            <h2>Informatica e Telecomunicazioni</h2>
+            <p>Sistemi, reti e programmazione.</p>
+          </div>
+        </a>
+
+      </section>
+    </div>
+  </main>
+
   <script src="Javascript/script2.js"></script>
   <script>
-fetch("posts.json")
-    .then(r => r.json())
-    .then(posts => {
-        const container = document.getElementById("posts");
-        container.innerHTML = "";
+    (function() {
+        const path = window.location.pathname.split("/").filter(Boolean);
+        const projectFolder = path[0];
+        const scriptPath = "/" + projectFolder + "/global.js";
+        const script = document.createElement("script");
 
-        posts.forEach(p => {
-            container.innerHTML += `
-                <div class="post">
-                    <h3>${p.title}</h3>
-                    <p>${p.content}</p>
-                    <small>${p.sector} → ${p.subject}</small>
-                </div>
-            `;
-        });
-    });
-</script>
-
-
-<script>
-(function() {
-    const path = window.location.pathname.split("/").filter(Boolean);
-
-    // Il progetto è SEMPRE nella prima cartella dopo localhost → "b"
-    const projectFolder = path[0]; // <-- QUI otteniamo "b"
-
-    // Percorso assoluto corretto per global.js
-    const scriptPath = "/" + projectFolder + "/global.js";
-
-    // Carichiamo il file davvero dal percorso corretto
-    const script = document.createElement("script");
-    script.src = scriptPath;
-    document.body.appendChild(script);
-
-    // Base URL per delete_post.php
-    window.__BASE_URL = "/" + projectFolder + "/";
-})();
-</script>
-
+        script.src = scriptPath;
+        document.body.appendChild(script);
+        window.__BASE_URL = "/" + projectFolder + "/";
+    })();
+  </script>
 
 </body>
 </html>

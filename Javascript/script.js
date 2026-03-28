@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const sidebar = document.getElementById('sidebar');
+  const navbar = document.getElementById('navbar');
   const toggleBtn = document.getElementById('mobile-toggle');
   const subjectsDropdown = document.getElementById('subjects-dropdown');
   const subjectsToggle = document.getElementById('subjects-toggle');
@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = document.getElementById('submit-btn');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
+  const carousel = document.getElementById("carousel");
+  carousel.innerHTML += carousel.innerHTML;
 
   const sections = {};
   document.querySelectorAll("[id$='-section']").forEach(section => {
@@ -52,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateSidebar() {
+  function updateNavbar() {
     clearSecondaryNav();
 
     if (!currentUser) {
@@ -112,13 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem("email", email);
     authModal.style.display = "none";
 
-    updateSidebar();
+    updateNavbar();
     showPosts();
   });
 
   toggleBtn?.addEventListener("click", () => {
-    document.querySelector(".sidebar-nav")?.classList.toggle("show");
-    sidebar?.classList.toggle("open-mobile");
+    document.querySelector(".navbar-nav")?.classList.toggle("show");
+    navbar?.classList.toggle("open-mobile");
   });
 
   subjectsToggle?.addEventListener("click", e => {
@@ -236,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g,'&#039;');
   }
 
-  updateSidebar();
+  updateNavbar();
   showPosts();
 });
 

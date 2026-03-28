@@ -25,29 +25,96 @@
     </div>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <header class="sidebar-header">
-      <img src="../images/logo.jpg" alt="Logo" />
+  <!-- Navbar -->
+  <aside class="navbar" id="navbar">
+    <header class="navbar-header">
+      <img src="../images/logo.jpg" alt="Logo" class="logo"/>
+      <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
     </header>
-    <nav class="sidebar-nav">
+    <nav class="navbar-nav">
       <ul class="nav-list primary-nav">
         <li class="nav-item">
-          <a href="..\Home.html" class="nav-link">
+          <a href="../Home.html" class="nav-link">
             <span class="material-symbols-rounded">home</span>
             <span class="nav-label">Home</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="Dashboard_Graf.html" class="nav-link">
+          <a href="../dashboard.html" class="nav-link">
             <span class="material-symbols-rounded">dashboard</span>
-            <span class="nav-label">Dashboard</span>
+            <span class="nav-label">Dashboard Grafica</span>
           </a>
         </li>
       </ul>
       <ul class="nav-list secondary-nav" style="margin-top:auto;"></ul>
     </nav>
   </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="main-header">
+      <div class="header-titles">
+          <h1>Tecnologie dei processi di produzione</h1>
+          <p class="subtitle">Inizia ora a visualizzare alcuni dei post caricati</p>
+      </div>
+      <div class="search-wrapper" id="searchWrapper">
+        <div class="search-content">
+           <div class="icon-search">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Cerca settore..." autocomplete="off">
+            <div class="icon-close" id="iconClose">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sectors-wrapper">
+      <section class="sectors-grid" id="carousel">
+
+          <a href="../Grafica_e_comunicazione/Teor_com.html" class="sector-card grafica">
+            <div class="sector-info">
+              <h2>Teoria della comunicazione</h2>
+              <p>Principi della comunicazione e trasmissione dei messaggi.</p>
+            </div>
+          </a>
+
+          <a href="../Grafica_e_comunicazione/Proget_mult.html" class="sector-card grafica">
+            <div class="sector-info">
+              <h2>Progettazione multimediale</h2>
+              <p>Creazione di contenuti digitali e progetti multimediali.</p>
+            </div>
+          </a>
+
+          <a href="../Grafica_e_comunicazione/Tecn_prog_prod.html" class="sector-card grafica">
+            <div class="sector-info">
+              <h2>Tecnologie dei processi di produzione</h2>
+              <p>Analisi e gestione dei processi produttivi tecnologici.</p>
+            </div>
+          </a>
+
+          <a href="../Grafica_e_comunicazione/Orga_gest_proc_prod.html" class="sector-card grafica">
+            <div class="sector-info">
+              <h2>Organizzazione e gestione dei <br> processi produttivi</h2>
+              <p>Pianificazione e coordinamento della produzione.</p>
+            </div>
+          </a>
+
+          <a href="../Grafica_e_comunicazione/Lab_tecn.html" class="sector-card grafica">
+            <div class="sector-info">
+              <h2>Laboratori tecnici</h2>
+              <p>Esperimenti pratici e applicazioni dei processi tecnici.</p>
+            </div>
+          </a>
+
+      </section>
+    </div>
+  </main>
 
   <!-- Main content -->
   <div id="section-Tecn_prog_prod" class="section main-content"></div>

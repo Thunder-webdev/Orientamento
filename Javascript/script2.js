@@ -1,11 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const sidebar = document.getElementById('sidebar');
+  const navbar = document.getElementById('navbar');
   const toggleBtn = document.getElementById('mobile-toggle');
   const secondaryNav = document.querySelector('.secondary-nav');
   const authModal = document.getElementById('auth-modal');
   const submitBtn = document.getElementById('submit-btn');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
+
+  const carousel = document.getElementById("carousel");
+  if (carousel) {
+    carousel.innerHTML += carousel.innerHTML;
+  }
 
   let users = JSON.parse(localStorage.getItem("users")) || [
     { email:"maurizio.minissale@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Minissale", canUpload:true },
@@ -45,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateSidebar() {
+  function updateNavbar() {
     clearSecondaryNav();
 
     if (!currentUser) {
@@ -105,13 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem("email", email);
     authModal.style.display = "none";
 
-    updateSidebar();
+    updateNavbar();
     showPosts();
   });
 
   toggleBtn?.addEventListener("click", () => {
-    document.querySelector(".sidebar-nav")?.classList.toggle("show");
-    sidebar?.classList.toggle("open-mobile");
+    document.querySelector(".navbar-nav")?.classList.toggle("show");
+    navbar?.classList.toggle("open-mobile");
   });
 
   function detectContext() {
@@ -294,31 +299,41 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g,'&#039;');
   }
 
-  updateSidebar();
+  updateNavbar();
   showPosts();
 });
 
-const searchInput = document.getElementById('searchInput');
-const iconClose = document.getElementById('iconClose');
-const sectorCards = document.querySelectorAll('.sector-card');
-iconClose.addEventListener('click', () => {
-    searchInput.value = '';
-    filterSectors('');
-    searchInput.focus(); 
-});
+  const searchInput = document.getElementById('searchInput');
+  const iconClose = document.getElementById('iconClose');
+  const sectorCards = document.querySelectorAll('.sector-card');
+  iconClose.addEventListener('click', () => {
+      searchInput.value = '';
+      filterSectors('');
+      searchInput.focus(); 
+  });
 
-searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    filterSectors(searchTerm);
-});
+  searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      filterSectors(searchTerm);
+  });
 
 function filterSectors(term) {
-    sectorCards.forEach(card => {
+    const cards = document.querySelectorAll('.sector-card');
+    const grid = document.querySelector('.sectors-grid');
+    if (term !== '') {
+        grid.style.animation = "none";
+    } else {
+        grid.style.animation = "scroll 30s linear infinite";
+    }
+    const shown = new Set();
+    cards.forEach(card => {
         const title = card.querySelector('h2').innerText.toLowerCase();
         const description = card.querySelector('p').innerText.toLowerCase();
-        
-        if (title.includes(term) || description.includes(term)) {
+        const key = title + description;
+
+        if ((title.includes(term) || description.includes(term)) && !shown.has(key)) {
             card.style.display = "flex";
+            shown.add(key);
         } else {
             card.style.display = "none";
         }

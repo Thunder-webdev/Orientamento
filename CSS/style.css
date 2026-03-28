@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 * {
@@ -14,7 +13,7 @@ body {
 }
 
 /* ================= NAVBAR ================= */
-.sidebar {
+.navbar {
   width: 100%;
   height: 64px;
   background: #1E1B4B;
@@ -44,11 +43,11 @@ body {
 }
 
 /* ================= NAV ================= */
-.sidebar-nav {
+.navbar-nav {
   display: flex;
   align-items: center;
   flex: 1;
-}
+} 
 
 .nav-list {
   display: flex;
@@ -91,76 +90,6 @@ body {
   cursor: pointer;
 }
 
-/* Sidebar 
-.sidebar {
-  width: 300px;
-  background: #151A2D;
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-.sidebar-header img {
-  width: 46px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.sidebar-nav {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.nav-list {
-  list-style: none;
-  padding-left: 0;
-}
-
-.nav-item {
-  margin-bottom: 10px;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 15px;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 8px;
-}
-
-.nav-link:hover {
-  background: #EEF2FF;
-  color: #151A2D;
-}
-
-.nav-label {
-  transition: opacity 0.3s;
-}
-
-.main-content {
-  padding: 60px;
-  position: relative;
-  z-index: 1;
-}
-
-.subtitle {
-  margin-bottom: 30px;
-  color: #4b5563;
-}
-
 /* ================= SECTORS ================= */
 .sectors-grid {
   max-height: 1200px;
@@ -191,7 +120,6 @@ body {
   color: #fff;
   text-decoration: none;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
   transition: 0.25s;
 }
 
@@ -213,12 +141,12 @@ body {
 }
 
 /* COLORS */
-.afm {background:linear-gradient(135deg,#16a34a,#065f46);}
-.turismo {background:linear-gradient(135deg,#0ea5e9,#0369a1);}
-.cat {background:linear-gradient(135deg,#f59e0b,#b45309);}
-.informatica {background:linear-gradient(135deg,#2563eb,#1e3a8a);}
-.grafica {background:linear-gradient(135deg,#ec4899,#9333ea);}
-.trasporti {background:linear-gradient(135deg,#0f766e,#134e4a);}
+.afm {background:linear-gradient(135deg,#C05A2C);}
+.turismo {background:linear-gradient(135deg,#6F2A48);}
+.cat {background:linear-gradient(135deg, #43a8fc);}
+.informatica {background:linear-gradient(135deg,#B72027);}
+.grafica {background:linear-gradient(135deg,#FFF140);}
+.trasporti {background:linear-gradient(135deg,#223B82);}
 
 /* Main content */
 .main-content h1 {
@@ -235,18 +163,38 @@ body {
   margin-bottom: 20px;
 }
 
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.sectors-wrapper {
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0;
 }
+
+.sectors-grid {
+  display: flex;     
+  gap: 30px;         
+  width: max-content;  
+  animation: scroll 30s linear infinite; 
+  will-change: transform;
+}
+
+
+.sector-card {
+  flex: 0 0 630px;    
+  text-wrap: nowrap;  
+}
+
 
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-35%);
+    transform: translateX(-50%);
   }
+}
+
+.sectors-grid:hover {
+  animation-play-state: paused;
 }
 
 /* Card post */
@@ -542,7 +490,7 @@ body {
   color: #fff;
 }
 
-.sidebar.open-mobile .sidebar-nav {
+.navbar.open-mobile .navbar-nav {
   display: flex !important;
 }
 
@@ -583,6 +531,7 @@ body {
     display: flex;
     align-items: center;
     margin-bottom: 2rem;
+    margin-right: 20px;
 }
 
 .search-wrapper:hover,
@@ -687,7 +636,7 @@ body {
     padding: 1rem;
   }
 
-  .sidebar {
+  .navbar {
     width: 100%;
     height: auto;
     position: relative;
@@ -697,7 +646,7 @@ body {
     padding: 0.5rem 1rem;
   }
 
-  .sidebar-header {
+  .navbar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -705,7 +654,7 @@ body {
     padding: 0;
   }
 
-  .sidebar-header img {
+  .navbar-header img {
     width: 40px;
   }
 
@@ -716,7 +665,7 @@ body {
     color: #fff;
   }
 
-  .sidebar-nav {
+  .navbar-nav {
     display: none;
     flex-direction: column;
     position: absolute;
@@ -729,7 +678,7 @@ body {
     border-top: 1px solid #333;
   }
 
-  .sidebar-nav.show {
+  .navbar-nav.show {
     display: flex;
     margin-top: 0;
   }

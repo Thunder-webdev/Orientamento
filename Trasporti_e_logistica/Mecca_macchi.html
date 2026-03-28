@@ -25,29 +25,82 @@
     </div>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <header class="sidebar-header">
-      <img src="../images/logo.jpg" alt="Logo" />
+  <!-- Navbar -->
+  <aside class="navbar" id="navbar">
+    <header class="navbar-header">
+      <img src="../images/logo.jpg" alt="Logo" class="logo"/>
+      <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
     </header>
-    <nav class="sidebar-nav">
+    <nav class="navbar-nav">
       <ul class="nav-list primary-nav">
         <li class="nav-item">
-          <a href="..\Home.html" class="nav-link">
+          <a href="../Home.html" class="nav-link">
             <span class="material-symbols-rounded">home</span>
             <span class="nav-label">Home</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="Dashboard_Trasp_Logi.html" class="nav-link">
+          <a href="../dashboard.html" class="nav-link">
             <span class="material-symbols-rounded">dashboard</span>
-            <span class="nav-label">Dashboard</span>
+            <span class="nav-label">Dashboard Trasporti e logistica</span>
           </a>
         </li>
       </ul>
       <ul class="nav-list secondary-nav" style="margin-top:auto;"></ul>
     </nav>
   </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="main-header">
+      <div class="header-titles">
+          <h1>Meccanica e macchine</h1>
+          <p class="subtitle">Inizia ora a visualizzare alcuni dei post caricati</p>
+      </div>
+      <div class="search-wrapper" id="searchWrapper">
+        <div class="search-content">
+           <div class="icon-search">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Cerca settore..." autocomplete="off">
+            <div class="icon-close" id="iconClose">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sectors-wrapper">
+      <section class="sectors-grid" id="carousel">
+
+          <a href="../Trasporti_e_logistica/Scienze_nav.html" class="sector-card trasporti">
+            <div class="sector-info">
+              <h2>Scienze della navigazione, <br> struttura e costruzione <br> del mezzo navale</h2>
+              <p>Studio della navigazione e progettazione delle imbarcazioni.</p>
+            </div>
+          </a>
+
+          <a href="../Trasporti_e_logistica/Mecca_macchi.html" class="sector-card trasporti">
+            <div class="sector-info">
+              <h2>Meccanica e macchine</h2>
+              <p>Funzionamento e manutenzione di macchine e motori.</p>
+            </div>
+          </a>
+
+          <a href="../Trasporti_e_logistica/Logistica.html" class="sector-card trasporti">
+            <div class="sector-info">
+              <h2>Logistica</h2>
+              <p>Gestione dei trasporti, magazzini e distribuzione.</p>
+            </div>
+          </a>
+
+      </section>
+    </div>
+  </main>
 
   <!-- Main content -->
   <div id="section-Mecca_macchi" class="section main-content"></div>
