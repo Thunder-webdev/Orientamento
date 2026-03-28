@@ -11,7 +11,7 @@ if (!$id) {
     exit;
 }
 
-$root = realpath(__DIR__);
+$root = dirname(__DIR__);
 $deleted = false;
 
 $it = new RecursiveIteratorIterator(
@@ -30,19 +30,15 @@ foreach ($it as $file) {
 
     foreach ($arr as $p) {
         if (($p['id'] ?? 0) == $id) {
-
             if (!empty($p['files'])) {
                 foreach ($p['files'] as $f) {
                     if (!empty($f['data'])) {
-                        $relative = ltrim($f['data'], '/');
-                        if (strpos($relative, 'uploads/') === 0) {
-                            $fp = $root . '/' . $relative;
-                            if (file_exists($fp)) unlink($fp);
-                        }
+                        $relative = str_replace('uploads/', '', $f['data']);
+                        $fp = $root . '/uploads/' . $relative;
+                        if (file_exists($fp)) unlink($fp);
                     }
                 }
             }
-
             $changed = true;
             $deleted = true;
         } else {
@@ -51,10 +47,7 @@ foreach ($it as $file) {
     }
 
     if ($changed) {
-        file_put_contents(
-            $path,
-            json_encode($new, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)
-        );
+        file_put_contents($path, json_encode($new, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
     }
 }
 

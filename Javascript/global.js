@@ -1,9 +1,7 @@
-
 function deletePost(id) {
-    if(!confirm("Sei sicuro di voler eliminare questo post?")) return;
+    if (!confirm("Sei sicuro di voler eliminare questo post?")) return;
 
-    const __base = window.__PATH_TO_ROOT || ".";
-    fetch(__base + "/PHP/delete_post.php", {
+    fetch("PHP/delete_post.php", {
         method: "POST",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
         body: "id=" + encodeURIComponent(id)
@@ -15,5 +13,9 @@ function deletePost(id) {
         } else {
             alert("Errore nell'eliminazione del post.");
         }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Errore server");
     });
 }

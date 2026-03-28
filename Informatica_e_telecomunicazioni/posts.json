@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": "1774698039555",
+        "title": "sfgs",
+        "text": "sfsaf",
+        "sector": "Informatica_e_telecomunicazioni",
+        "subject": "Sist_Reti",
+        "section": "Informatica_e_telecomunicazioni\/Sist_Reti",
+        "ownerName": "Prof. Minissale",
+        "ownerEmail": "maurizio.minissale@davincimilazzo.edu.it",
+        "files": [
+            {
+                "name": "WhatsApp_Image_2026-03-19_at_16.46.58.jpeg",
+                "type": "image\/jpeg",
+                "data": "uploads\/1774698039555_WhatsApp_Image_2026-03-19_at_16.46.58.jpeg"
+            }
+        ],
+        "timestamp": 1774698039
+    }
+]

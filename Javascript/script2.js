@@ -1,32 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-  /* =============================
-     CONFIGURAZIONE / SELETTORI
-  ============================= */
   const sidebar = document.getElementById('sidebar');
   const toggleBtn = document.getElementById('mobile-toggle');
-
-  const subjectsDropdown = document.getElementById('subjects-dropdown');
-  const subjectsToggle = document.getElementById('subjects-toggle');
-
   const secondaryNav = document.querySelector('.secondary-nav');
-
   const authModal = document.getElementById('auth-modal');
   const submitBtn = document.getElementById('submit-btn');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
 
-  /* =============================
-     SEZIONI PRESENTI NELLA PAGINA
-  ============================= */
-  const sections = {};
-  document.querySelectorAll("[id$='-section']").forEach(sec => {
-    sections[sec.id.replace('-section', '')] = sec;
-  });
-
-  /* =============================
-     UTENTI (fallback localStorage)
-  ============================= */
   let users = JSON.parse(localStorage.getItem("users")) || [
     { email:"maurizio.minissale@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Minissale", canUpload:true },
     { email:"rosita.artigliere@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Artigliere", canUpload:true },
@@ -35,9 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentUser = localStorage.getItem("email") || null;
 
-  /* =============================
-     HELPER NAVIGAZIONE
-  ============================= */
   function clearSecondaryNav() {
     if (secondaryNav) secondaryNav.innerHTML = '';
   }
@@ -49,12 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return li;
   }
 
-  /* =============================
-     LOGIN / SIDEBAR
-  ============================= */
   function showLoginButton() {
     if (!secondaryNav) return;
-
     clearSecondaryNav();
 
     const li = createNavItem(`
@@ -109,9 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* =============================
-     EVENTI INTERFACCIA
-  ============================= */
   document.getElementById("close-modal")?.addEventListener("click", () => {
     authModal.style.display = "none";
   });
@@ -144,14 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebar?.classList.toggle("open-mobile");
   });
 
-  subjectsToggle?.addEventListener("click", e => {
-    e.preventDefault();
-    subjectsDropdown?.classList.toggle("open");
-  });
-
-  /* =============================
-     CONTESTO PAGINA (JSON + DIV)
-  ============================= */
   function detectContext() {
     const body = document.body;
 
@@ -184,23 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  /* =============================
-     FETCH JSON SICURO
-  ============================= */
   async function safeFetchJson(path) {
     const res = await fetch(path, { cache: "no-store" });
     if (!res.ok) throw new Error(res.status);
     return await res.json();
   }
 
-  /* =============================
-     CARICAMENTO E RENDER POST
-  ============================= */
   async function showPosts() {
     const { postsPath, targetDiv } = detectContext();
-    const container =
-      document.getElementById(targetDiv) ||
-      document.querySelector("[id$='-section']");
+    const container = document.getElementById(targetDiv) || document.querySelector("[id$='-section']");
 
     if (!container) return;
 
@@ -262,9 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* =============================
-     UPLOAD (upload.html)
-  ============================= */
   (function bindUpload() {
     const uploadBtn = document.querySelector('.upload-btn');
     if (!uploadBtn) return;
@@ -275,7 +226,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fileInput?.addEventListener('change', () => {
       const img = [...fileInput.files].find(f => f.type.startsWith("image/"));
-      if (!img) return previewDiv.style.display = 'none';
+      if (!img) {
+        if (previewDiv) previewDiv.style.display = 'none';
+        return;
+      }
 
       const reader = new FileReader();
       reader.onload = e => {
@@ -289,9 +243,19 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
 
       const fd = new FormData();
-      fd.append('title', document.querySelector('.upload-title').value || 'Senza titolo');
-      fd.append('desc', document.querySelector('.upload-desc').value || '');
-      fd.append('section', document.getElementById('sector')?.value || '');
+      fd.append('title', document.querySelector('.upload-title')?.value || 'Senza titolo');
+      fd.append('desc', document.querySelector('.upload-desc')?.value || '');
+      
+      const sectorValue = document.getElementById('sector')?.value || '';
+      const subjectValue = document.getElementById('subject')?.value || '';
+      
+      if (!sectorValue) {
+        alert('Seleziona un settore!');
+        return;
+      }
+
+      const section = subjectValue ? `${sectorValue}/${subjectValue}` : sectorValue;
+      fd.append('section', section);
 
       const user = users.find(u => u.email === currentUser);
       fd.append('ownerName', user?.name || 'Utente');
@@ -299,21 +263,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
       [...fileInput.files].forEach(f => fd.append('files[]', f));
 
-      const res = await fetch('PHP/upload.php', { method: 'POST', body: fd });
-      const data = await res.json();
+      try {
+        const res = await fetch('PHP/upload.php', { method: 'POST', body: fd });
+        const data = await res.json();
 
-      if (data.success) {
-        alert("Caricato con successo!");
-        showPosts();
-      } else {
-        alert("Errore upload");
+        if (data.success) {
+          alert("Caricato con successo!");
+          document.querySelector('.upload-title').value = '';
+          document.querySelector('.upload-desc').value = '';
+          fileInput.value = '';
+          if (previewDiv) previewDiv.style.display = 'none';
+          document.getElementById('sector').value = '';
+          document.getElementById('subject').innerHTML = '<option value="">Seleziona la materia</option>';
+        } else {
+          alert("Errore upload: " + (data.error || 'Sconosciuto'));
+        }
+      } catch (err) {
+        console.error('Errore fetch:', err);
+        alert("Errore di connessione!");
       }
     });
   })();
 
-  /* =============================
-     UTIL
-  ============================= */
   function escapeHtml(str) {
     return String(str || '')
       .replace(/&/g,'&amp;')
@@ -323,9 +294,33 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g,'&#039;');
   }
 
-  /* =============================
-     INIT
-  ============================= */
   updateSidebar();
   showPosts();
 });
+
+const searchInput = document.getElementById('searchInput');
+const iconClose = document.getElementById('iconClose');
+const sectorCards = document.querySelectorAll('.sector-card');
+iconClose.addEventListener('click', () => {
+    searchInput.value = '';
+    filterSectors('');
+    searchInput.focus(); 
+});
+
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    filterSectors(searchTerm);
+});
+
+function filterSectors(term) {
+    sectorCards.forEach(card => {
+        const title = card.querySelector('h2').innerText.toLowerCase();
+        const description = card.querySelector('p').innerText.toLowerCase();
+        
+        if (title.includes(term) || description.includes(term)) {
+            card.style.display = "flex";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}

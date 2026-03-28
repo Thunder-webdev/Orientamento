@@ -1,32 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-  /* =========================
-     CONFIG / SELETTORI
-  ========================= */
   const sidebar = document.getElementById('sidebar');
   const toggleBtn = document.getElementById('mobile-toggle');
-
   const subjectsDropdown = document.getElementById('subjects-dropdown');
   const subjectsToggle = document.getElementById('subjects-toggle');
-
   const secondaryNav = document.querySelector('.secondary-nav');
-
   const authModal = document.getElementById('auth-modal');
   const submitBtn = document.getElementById('submit-btn');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
 
-  /* =========================
-     SEZIONI PRESENTI NELLA PAGINA
-  ========================= */
   const sections = {};
   document.querySelectorAll("[id$='-section']").forEach(section => {
     sections[section.id.replace('-section', '')] = section;
   });
 
-  /* =========================
-     UTENTI (fallback localStorage)
-  ========================= */
   let users = JSON.parse(localStorage.getItem("users")) || [
     { email:"maurizio.minissale@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Minissale", canUpload:true },
     { email:"rosita.artigliere@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Artigliere", canUpload:true },
@@ -35,9 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentUser = localStorage.getItem("email") || null;
 
-  /* =========================
-     HELPER NAVIGAZIONE
-  ========================= */
   function clearSecondaryNav() {
     if (secondaryNav) secondaryNav.innerHTML = '';
   }
@@ -49,12 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return li;
   }
 
-  /* =========================
-     LOGIN / SIDEBAR
-  ========================= */
   function showLoginButton() {
     if (!secondaryNav) return;
-
     clearSecondaryNav();
 
     const li = createNavItem(`
@@ -109,9 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* =========================
-     EVENTI UI
-  ========================= */
   document.getElementById("close-modal")?.addEventListener("click", () => {
     authModal.style.display = "none";
   });
@@ -149,9 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
     subjectsDropdown?.classList.toggle("open");
   });
 
-  /* =========================
-     CONTESTO PAGINA (JSON + DIV)
-  ========================= */
   function detectContext() {
     const body = document.body;
 
@@ -184,19 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  /* =========================
-     FETCH JSON SICURO
-  ========================= */
   async function safeFetchJson(path) {
     const res = await fetch(path, { cache: "no-store" });
     if (!res.ok) throw new Error(res.status);
-    const text = await res.text();
-    return JSON.parse(text);
+    return await res.json();
   }
 
-  /* =========================
-     RENDER POST
-  ========================= */
   async function showPosts() {
     const { postsPath, targetDiv } = detectContext();
     let container = document.getElementById(targetDiv) || document.querySelector("[id$='-section']");
@@ -260,56 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* =========================
-     UPLOAD (upload.html)
-  ========================= */
-  (function bindUpload() {
-    const uploadBtn = document.querySelector('.upload-btn');
-    if (!uploadBtn) return;
-
-    const fileInput = document.querySelector('.upload-file');
-    const previewDiv = document.querySelector('.upload-preview');
-    const previewImg = document.getElementById('preview-img');
-
-    fileInput?.addEventListener('change', () => {
-      const img = [...fileInput.files].find(f => f.type.startsWith('image/'));
-      if (!img) return previewDiv.style.display = 'none';
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        previewImg.src = e.target.result;
-        previewDiv.style.display = 'flex';
-      };
-      reader.readAsDataURL(img);
-    });
-
-    uploadBtn.addEventListener('click', async e => {
-      e.preventDefault();
-
-      const fd = new FormData();
-      fd.append('title', document.querySelector('.upload-title').value || 'Senza titolo');
-      fd.append('desc', document.querySelector('.upload-desc').value || '');
-      fd.append('section', document.getElementById('sector')?.value || '');
-      fd.append('ownerEmail', currentUser || '');
-      fd.append('ownerName', users.find(u => u.email === currentUser)?.name || 'Utente');
-
-      [...fileInput.files].forEach(f => fd.append('files[]', f));
-
-      const res = await fetch('/PHP/upload.php', { method: 'POST', body: fd });
-      const data = await res.json();
-
-      if (data.success) {
-        alert('Caricato con successo');
-        showPosts();
-      } else {
-        alert('Errore upload');
-      }
-    });
-  })();
-
-  /* =========================
-     UTIL
-  ========================= */
   function escapeHtml(str) {
     return String(str || '')
       .replace(/&/g,'&amp;')
@@ -319,9 +236,33 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g,'&#039;');
   }
 
-  /* =========================
-     INIT
-  ========================= */
   updateSidebar();
   showPosts();
 });
+
+const searchInput = document.getElementById('searchInput');
+const iconClose = document.getElementById('iconClose');
+const sectorCards = document.querySelectorAll('.sector-card');
+iconClose.addEventListener('click', () => {
+    searchInput.value = '';
+    filterSectors('');
+    searchInput.focus(); 
+});
+
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    filterSectors(searchTerm);
+});
+
+function filterSectors(term) {
+    sectorCards.forEach(card => {
+        const title = card.querySelector('h2').innerText.toLowerCase();
+        const description = card.querySelector('p').innerText.toLowerCase();
+        
+        if (title.includes(term) || description.includes(term)) {
+            card.style.display = "flex";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}

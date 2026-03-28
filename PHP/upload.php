@@ -16,16 +16,18 @@ if (!$section) {
 
 [$sector, $subject] = array_pad(explode('/', $section, 2), 2, '');
 
-// funzione JSON
-function read_json($p){ return file_exists($p) ? (json_decode(file_get_contents($p), true) ?: []) : []; }
-function write_json($p,$a){ file_put_contents($p,json_encode(array_values($a),JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)); }
+function read_json($p){ 
+    return file_exists($p) ? (json_decode(file_get_contents($p), true) ?: []) : []; 
+}
 
-// ID UNICO SICURO
+function write_json($p,$a){ 
+    file_put_contents($p,json_encode(array_values($a),JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)); 
+}
+
 $newId = time() . rand(100,999);
 
-// UPLOAD FILES
 $uploadedFiles = [];
-$uploadsDir = __DIR__ . '/uploads';
+$uploadsDir = dirname(__DIR__) . '/uploads';
 if (!is_dir($uploadsDir)) mkdir($uploadsDir,0755,true);
 
 if (!empty($_FILES['files'])) {
@@ -38,12 +40,11 @@ if (!empty($_FILES['files'])) {
         $uploadedFiles[] = [
             'name'=>$name,
             'type'=>$_FILES['files']['type'][$i] ?? '',
-            'data' => '/Orientamento/Orientamento/uploads/' . $uniq
+            'data' => 'uploads/' . $uniq
         ];
     }
 }
 
-// POST OBJECT
 $newPost = [
     'id'=>$newId,
     'title'=>$title,
@@ -57,14 +58,13 @@ $newPost = [
     'timestamp'=>time()
 ];
 
-// GENERALE
-$generalFile = __DIR__.'/posts.json';
+$rootDir = dirname(__DIR__);
+$generalFile = "$rootDir/posts.json";
 $general = read_json($generalFile);
 array_unshift($general,$newPost);
 write_json($generalFile,$general);
 
-// SETTORE
-$sectorDir = __DIR__."/$sector";
+$sectorDir = "$rootDir/$sector";
 if (!is_dir($sectorDir)) mkdir($sectorDir,0755,true);
 
 $sectorFile = "$sectorDir/posts.json";
@@ -72,7 +72,6 @@ $sectorPosts = read_json($sectorFile);
 array_unshift($sectorPosts,$newPost);
 write_json($sectorFile,$sectorPosts);
 
-// MATERIA
 if ($subject) {
     $subjectFile = "$sectorDir/{$subject}_posts.json";
     $subjectPosts = read_json($subjectFile);
