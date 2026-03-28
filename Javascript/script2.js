@@ -1,24 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const navbar = document.getElementById('navbar');
-  const toggleBtn = document.getElementById('mobile-toggle');
-  const secondaryNav = document.querySelector('.secondary-nav');
   const authModal = document.getElementById('auth-modal');
   const submitBtn = document.getElementById('submit-btn');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
+  const nameInput = document.getElementById('name');
+  const modalTitle = document.getElementById('modal-title');
+  const authToggle = document.getElementById('auth-toggle');
+  const secondaryNav = document.querySelector('.secondary-nav');
 
-  const carousel = document.getElementById("carousel");
-  if (carousel) {
-    carousel.innerHTML += carousel.innerHTML;
-  }
-
-  let users = JSON.parse(localStorage.getItem("users")) || [
-    { email:"maurizio.minissale@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Minissale", canUpload:true },
-    { email:"rosita.artigliere@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Artigliere", canUpload:true },
-    { email:"antonio.caristia@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Caristia", canUpload:true }
+  let teachers = JSON.parse(localStorage.getItem("teachers")) || [
+    { email:"maurizio.minissale@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Minissale", role:"teacher" },
+    { email:"rosita.artigliere@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Artigliere", role:"teacher" },
+    { email:"antonio.caristia@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Caristia", role:"teacher" }
   ];
 
-  let currentUser = localStorage.getItem("email") || null;
+  let students = JSON.parse(localStorage.getItem("students")) || [];
+  let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  let isRegistering = false;
 
   function clearSecondaryNav() {
     if (secondaryNav) secondaryNav.innerHTML = '';
@@ -46,11 +45,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById("login-link")?.addEventListener("click", e => {
       e.preventDefault();
-      authModal.style.display = "flex";
+      showLoginModal();
     });
   }
 
-  function updateNavbar() {
+  function showLoginModal() {
+    isRegistering = false;
+    modalTitle.textContent = "Accedi";
+    submitBtn.textContent = "Accedi";
+    if (nameInput) nameInput.style.display = "none";
+    if (authToggle) authToggle.innerHTML = `Non hai un account? <a href="#" id="register-link">Registrati come studente</a>`;
+    authModal.style.display = "flex";
+
+    setTimeout(() => {
+      document.getElementById('register-link')?.addEventListener('click', e => {
+        e.preventDefault();
+        showRegisterModal();
+      });
+    }, 100);
+  }
+
+  function showRegisterModal() {
+    isRegistering = true;
+    modalTitle.textContent = "Registrati come Studente";
+    submitBtn.textContent = "Registrati";
+    if (nameInput) nameInput.style.display = "block";
+    if (authToggle) authToggle.innerHTML = `Hai già un account? <a href="#" id="login-link-switch">Accedi</a>`;
+
+    setTimeout(() => {
+      document.getElementById('login-link-switch')?.addEventListener('click', e => {
+        e.preventDefault();
+        showLoginModal();
+      });
+    }, 100);
+  }
+
+  function updateSidebar() {
     clearSecondaryNav();
 
     if (!currentUser) {
@@ -58,13 +88,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const userObj = users.find(u => u.email === currentUser);
-
-    if (userObj?.canUpload) {
+    if (currentUser.role === "teacher") {
       secondaryNav.appendChild(createNavItem(`
-        <a href="upload.html" class="nav-link">
-          <span class="material-symbols-rounded">photo_camera</span>
+        <a href="${getUploadPath()}" class="nav-link">
+          <span class="material-symbols-rounded">upload</span>
           <span class="nav-label">Carica Contenuti</span>
+        </a>
+      `));
+    }
+
+    if (currentUser.role === "student") {
+      secondaryNav.appendChild(createNavItem(`
+        <a href="${getFavoritesPath()}" class="nav-link">
+          <span class="material-symbols-rounded">favorite</span>
+          <span class="nav-label">Preferiti</span>
         </a>
       `));
     }
@@ -72,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logout = createNavItem(`
       <a href="#" class="nav-link" id="sign-out">
         <span class="material-symbols-rounded">logout</span>
-        <span class="nav-label">Sign Out</span>
+        <span class="nav-label">Esci</span>
       </a>
     `);
 
@@ -80,43 +117,89 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById("sign-out")?.addEventListener("click", e => {
       e.preventDefault();
-      localStorage.removeItem("email");
+      localStorage.removeItem("currentUser");
       currentUser = null;
       showLoginButton();
-      showPosts();
+      if (window.location.pathname.includes('favorites.html') || window.location.pathname.includes('upload.html')) {
+        window.location.href = getHomePath();
+      } else {
+        showPosts();
+      }
     });
   }
+
+function getUploadPath() {
+  return '/c/upload.html';
+}
+
+function getFavoritesPath() {
+  return '/c/favorites.html';
+}
+
+function getHomePath() {
+  return '/c/Home.html';
+}
 
   document.getElementById("close-modal")?.addEventListener("click", () => {
     authModal.style.display = "none";
   });
 
-  submitBtn?.addEventListener("click", () => {
+  submitBtn?.addEventListener("click", async () => {
     const email = emailInput.value.trim();
     const password = passwordInput.value;
+    const name = nameInput?.value.trim();
 
     if (!email || !password) {
       alert("Inserisci email e password!");
       return;
     }
 
-    const user = users.find(u => u.email === email && u.password === password);
-    if (!user) {
-      alert("Credenziali non valide!");
-      return;
+    if (isRegistering) {
+      if (!name) {
+        alert("Inserisci il tuo nome!");
+        return;
+      }
+
+      if (teachers.find(t => t.email === email) || students.find(s => s.email === email)) {
+        alert("Email già registrata!");
+        return;
+      }
+
+      const newStudent = {
+        email: email,
+        password: password,
+        name: name,
+        role: "student"
+      };
+
+      students.push(newStudent);
+      localStorage.setItem("students", JSON.stringify(students));
+
+      currentUser = newStudent;
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+      authModal.style.display = "none";
+      alert("Registrazione completata!");
+      updateSidebar();
+      showPosts();
+    } else {
+      const teacher = teachers.find(t => t.email === email && t.password === password);
+      const student = students.find(s => s.email === email && s.password === password);
+
+      const user = teacher || student;
+
+      if (!user) {
+        alert("Credenziali non valide!");
+        return;
+      }
+
+      currentUser = user;
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+      authModal.style.display = "none";
+      updateSidebar();
+      showPosts();
     }
-
-    currentUser = email;
-    localStorage.setItem("email", email);
-    authModal.style.display = "none";
-
-    updateNavbar();
-    showPosts();
-  });
-
-  toggleBtn?.addEventListener("click", () => {
-    document.querySelector(".navbar-nav")?.classList.toggle("show");
-    navbar?.classList.toggle("open-mobile");
   });
 
   function detectContext() {
@@ -157,6 +240,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return await res.json();
   }
 
+  function toggleFavorite(postId) {
+    if (!currentUser) {
+      alert("Accedi per salvare i preferiti!");
+      return;
+    }
+
+    const index = favorites.indexOf(postId);
+    if (index > -1) {
+      favorites.splice(index, 1);
+    } else {
+      favorites.push(postId);
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    showPosts();
+  }
+
+  function isFavorite(postId) {
+    return favorites.includes(postId);
+  }
+
   async function showPosts() {
     const { postsPath, targetDiv } = detectContext();
     const container = document.getElementById(targetDiv) || document.querySelector("[id$='-section']");
@@ -175,120 +278,115 @@ document.addEventListener('DOMContentLoaded', () => {
         card.className = 'post-card';
 
         let filesHTML = '';
-        if (Array.isArray(post.files)) {
+        if (Array.isArray(post.files) && post.files.length > 0) {
           filesHTML = `<div class="post-files">` +
             post.files.map(f => {
               if (f.type?.startsWith('image/')) {
-                return `<img src="${f.data}" alt="">`;
+                return `<img src="${f.data}" alt="${f.name || 'image'}" loading="lazy">`;
               }
-              return `<a href="${f.data}" download>${f.name || 'file'}</a>`;
+              return `<a href="${f.data}" download class="file-link">
+                <span class="material-symbols-rounded">download</span>
+                ${f.name || 'file'}
+              </a>`;
             }).join('') +
           `</div>`;
         }
 
-        card.innerHTML = `
-          <div class="post-content">
-            <div class="post-title">${escapeHtml(post.title || 'Senza titolo')}</div>
-            <div class="post-text">
-              <strong>${escapeHtml(post.ownerName || 'Utente')}</strong>:
-              ${escapeHtml(post.text || post.desc || '')}
+        const favoriteClass = isFavorite(post.id) ? 'favorite-active' : '';
+        const favoriteIcon = isFavorite(post.id) ? 'favorite' : 'favorite_border';
+      
+        if (currentUser && currentUser.role === "student") {
+          card.innerHTML = `
+            <div class="post-header">
+              <div class="post-author">
+                <div class="author-avatar">${(post.ownerName || 'U').charAt(0).toUpperCase()}</div>
+                <div class="author-info">
+                  <span class="author-name">${escapeHtml(post.ownerName || 'Utente')}</span>
+                  <span class="post-date">${formatDate(post.timestamp)}</span>
+                </div>
+              </div>
+              <button class="favorite-btn ${favoriteClass}" data-post-id="${post.id}" title="${isFavorite(post.id) ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}">
+                <span class="material-symbols-rounded">${favoriteIcon}</span>
+              </button>
             </div>
-          </div>
-          ${filesHTML}
-        `;
+            <div class="post-content">
+              <h3 class="post-title">${escapeHtml(post.title || 'Senza titolo')}</h3>
+              <p class="post-text">${escapeHtml(post.text || post.desc || '')}</p>
+            </div>
+            ${filesHTML}
+            <div class="post-footer">
+            </div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="post-header">
+              <div class="post-author">
+                <div class="author-avatar">${(post.ownerName || 'U').charAt(0).toUpperCase()}</div>
+                <div class="author-info">
+                  <span class="author-name">${escapeHtml(post.ownerName || 'Utente')}</span>
+                  <span class="post-date">${formatDate(post.timestamp)}</span>
+                </div>
+              </div>
+            </div>
+            <div class="post-content">
+              <h3 class="post-title">${escapeHtml(post.title || 'Senza titolo')}</h3>
+              <p class="post-text">${escapeHtml(post.text || post.desc || '')}</p>
+            </div>
+            ${filesHTML}
+            <div class="post-footer">
+            </div>
+          `;
+        }
 
-        if (post.ownerEmail === currentUser) {
-          const del = document.createElement('button');
-          del.className = 'delete-btn';
-          del.textContent = 'Elimina';
-          del.onclick = () => {
+        if (currentUser && currentUser.role === "teacher" && post.ownerEmail === currentUser.email) {
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.innerHTML = '<span class="material-symbols-rounded">delete</span> Elimina';
+          deleteBtn.onclick = () => {
             if (confirm("Eliminare questo post?")) {
               fetch('PHP/delete_post.php', {
                 method: 'POST',
                 headers: { 'Content-Type':'application/json' },
                 body: JSON.stringify({ id: post.id })
-              }).then(showPosts);
+              }).then(() => showPosts());
             }
           };
-          card.appendChild(del);
+          card.querySelector('.post-footer').appendChild(deleteBtn);
         }
+
+        card.querySelector('.favorite-btn')?.addEventListener('click', function() {
+          toggleFavorite(post.id);
+        });
 
         container.appendChild(card);
       });
 
     } catch (err) {
       console.error("Errore caricamento post:", err);
+      if (container) {
+        container.innerHTML = '<div class="no-posts">Nessun contenuto disponibile</div>';
+      }
     }
   }
 
-  (function bindUpload() {
-    const uploadBtn = document.querySelector('.upload-btn');
-    if (!uploadBtn) return;
+  function formatDate(timestamp) {
+    if (!timestamp) return 'Data sconosciuta';
+    const date = new Date(timestamp * 1000);
+    const now = new Date();
+    const diff = now - date;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
 
-    const fileInput = document.querySelector('.upload-file');
-    const previewDiv = document.querySelector('.upload-preview');
-    const previewImg = document.getElementById('preview-img');
+    if (minutes < 60) return `${minutes} minuti fa`;
+    if (hours < 24) return `${hours} ore fa`;
+    if (days < 7) return `${days} giorni fa`;
+    return date.toLocaleDateString('it-IT');
+  }
 
-    fileInput?.addEventListener('change', () => {
-      const img = [...fileInput.files].find(f => f.type.startsWith("image/"));
-      if (!img) {
-        if (previewDiv) previewDiv.style.display = 'none';
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        previewImg.src = e.target.result;
-        previewDiv.style.display = "flex";
-      };
-      reader.readAsDataURL(img);
-    });
-
-    uploadBtn.addEventListener('click', async e => {
-      e.preventDefault();
-
-      const fd = new FormData();
-      fd.append('title', document.querySelector('.upload-title')?.value || 'Senza titolo');
-      fd.append('desc', document.querySelector('.upload-desc')?.value || '');
-      
-      const sectorValue = document.getElementById('sector')?.value || '';
-      const subjectValue = document.getElementById('subject')?.value || '';
-      
-      if (!sectorValue) {
-        alert('Seleziona un settore!');
-        return;
-      }
-
-      const section = subjectValue ? `${sectorValue}/${subjectValue}` : sectorValue;
-      fd.append('section', section);
-
-      const user = users.find(u => u.email === currentUser);
-      fd.append('ownerName', user?.name || 'Utente');
-      fd.append('ownerEmail', currentUser || '');
-
-      [...fileInput.files].forEach(f => fd.append('files[]', f));
-
-      try {
-        const res = await fetch('PHP/upload.php', { method: 'POST', body: fd });
-        const data = await res.json();
-
-        if (data.success) {
-          alert("Caricato con successo!");
-          document.querySelector('.upload-title').value = '';
-          document.querySelector('.upload-desc').value = '';
-          fileInput.value = '';
-          if (previewDiv) previewDiv.style.display = 'none';
-          document.getElementById('sector').value = '';
-          document.getElementById('subject').innerHTML = '<option value="">Seleziona la materia</option>';
-        } else {
-          alert("Errore upload: " + (data.error || 'Sconosciuto'));
-        }
-      } catch (err) {
-        console.error('Errore fetch:', err);
-        alert("Errore di connessione!");
-      }
-    });
-  })();
+  function formatCategory(section) {
+    return section.replace(/_/g, ' ').replace(/,/g, ', ').replace(/\//g, ' › ');
+  }
 
   function escapeHtml(str) {
     return String(str || '')
@@ -299,41 +397,98 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g,'&#039;');
   }
 
-  updateNavbar();
+  updateSidebar();
   showPosts();
 });
 
-  const searchInput = document.getElementById('searchInput');
-  const iconClose = document.getElementById('iconClose');
-  const sectorCards = document.querySelectorAll('.sector-card');
-  iconClose.addEventListener('click', () => {
-      searchInput.value = '';
-      filterSectors('');
-      searchInput.focus(); 
-  });
+  document.querySelector('.upload-btn')?.addEventListener('click', async () => {
+  const title = document.querySelector('.upload-title').value.trim();
+  const desc = document.querySelector('.upload-desc').value.trim();
+  const sector = document.getElementById('sector').value;
+  const subject = document.getElementById('subject').value;
+  const filesInput = document.querySelector('.upload-file');
 
-  searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      filterSectors(searchTerm);
-  });
+  if (!sector) {
+    alert("Seleziona un settore!");
+    return;
+  }
+
+  const section = subject ? `${sector}/${subject}` : sector;
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('desc', desc);
+  formData.append('section', section);
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  formData.append('ownerName', currentUser?.name || 'Utente');
+  formData.append('ownerEmail', currentUser?.email || '');
+  if (filesInput.files.length > 0) {
+    for (let file of filesInput.files) {
+      formData.append('files[]', file);
+    }
+  }
+
+  try {
+    const res = await fetch('PHP/upload_post.php', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Upload completato!");
+      location.reload();
+    } else {
+      alert("Errore: " + data.error);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Errore durante l'upload!");
+  }
+});
+
+const searchInput = document.getElementById('searchInput');
+const iconClose = document.getElementById('iconClose');
+const sectorCards = document.querySelectorAll('.sector-card');
+const postCards = document.querySelectorAll('.post-card');
+
+iconClose.addEventListener('click', () => {
+    searchInput.value = '';
+    filterSectors('');
+    filterPosts('');
+    searchInput.focus(); 
+});
+
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    filterSectors(searchTerm);
+    filterPosts(searchTerm);
+});
 
 function filterSectors(term) {
-    const cards = document.querySelectorAll('.sector-card');
-    const grid = document.querySelector('.sectors-grid');
-    if (term !== '') {
-        grid.style.animation = "none";
-    } else {
-        grid.style.animation = "scroll 30s linear infinite";
-    }
-    const shown = new Set();
-    cards.forEach(card => {
+    sectorCards.forEach(card => {
         const title = card.querySelector('h2').innerText.toLowerCase();
         const description = card.querySelector('p').innerText.toLowerCase();
-        const key = title + description;
-
-        if ((title.includes(term) || description.includes(term)) && !shown.has(key)) {
+        
+        if (title.includes(term) || description.includes(term)) {
             card.style.display = "flex";
-            shown.add(key);
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
+function filterPosts(term) {
+    const postCards = document.querySelectorAll('.post-card');
+
+    postCards.forEach(card => {
+        const title = card.querySelector('.post-title')?.innerText.toLowerCase() || '';
+        const description = card.querySelector('.post-text')?.innerText.toLowerCase() || '';
+        
+        if (title.includes(term) || description.includes(term)) {
+            card.style.display = "block";
         } else {
             card.style.display = "none";
         }

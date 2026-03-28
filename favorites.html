@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I Miei Preferiti - StudyNow</title>
+  <link rel="icon" href="images/logo.jpg" type="image/png">
+  <link rel="stylesheet" href="CSS/style.css" />
+  <link rel="stylesheet" href="CSS/modern.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+
+  <div id="auth-modal" class="auth-modal" style="display:none;">
+    <div class="auth-modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Accedi</h2>
+        <button id="close-modal" class="close-modal">&times;</button>
+      </div>
+      <input type="text" id="name" placeholder="Nome completo" style="display:none;" />
+      <input type="text" id="email" placeholder="E-mail" />
+      <input type="password" id="password" placeholder="Password" />
+      <button id="submit-btn" class="auth-btn">Accedi</button>
+      <div id="auth-toggle"></div>
+    </div>
+  </div>
+
+  <aside class="navbar" id="navbar">
+    <header class="navbar-header">
+      <img src="images/logo.jpg" alt="Logo" class="logo"/>
+      <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
+    </header>
+    <nav class="navbar-nav">
+      <ul class="nav-list primary-nav">
+        <li class="nav-item">
+          <a href="Home.html" class="nav-link">
+            <span class="material-symbols-rounded">home</span>
+            <span class="nav-label">Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="dashboard.html" class="nav-link">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-list secondary-nav" style="margin-left:auto;"></ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="favorites-container">
+      <div class="favorites-header">
+        <h1>I Miei Preferiti</h1>
+        <p>Tutti i contenuti che hai salvato</p>
+      </div>
+      <div id="favorites-section" class="favorites-grid"></div>
+    </div>
+  </main>
+  <script src="Javascript/script2.js"></script>
+  <script>
+    async function loadFavorites() {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      const container = document.getElementById('favorites-section');
+
+      if (!currentUser) {
+        container.innerHTML = `
+          <div class="empty-favorites">
+            <span class="material-symbols-rounded">login</span>
+            <h2>Accedi per vedere i tuoi preferiti</h2>
+            <p>Salva i contenuti che ti interessano per ritrovarli facilmente</p>
+            <a href="#" class="btn-primary" onclick="document.getElementById('login-link').click(); return false;">
+              <span class="material-symbols-rounded">login</span>
+              Accedi
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      if (favorites.length === 0) {
+        container.innerHTML = `
+          <div class="empty-favorites">
+            <span class="material-symbols-rounded">favorite_border</span>
+            <h2>Nessun preferito salvato</h2>
+            <p>Inizia a salvare i contenuti che ti interessano</p>
+            <a href="dashboard.html" class="btn-primary">
+              <span class="material-symbols-rounded">dashboard</span>
+              Vai alla Dashboard
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        const allPosts = [];
+        const jsonFiles = [
+          'Informatica_e_telecomunicazioni/posts.json',
+          'Amministrazione,_finanza_e_marketing/posts.json',
+          'Turismo/posts.json',
+          'Grafica_e_comunicazione/posts.json',
+          'Costruzione,_ambiente_e_territorio/posts.json',
+          'Trasporti_e_logistica/posts.json'
+        ];
+
+        for (const file of jsonFiles) {
+          try {
+            const res = await fetch(file, { cache: "no-store" });
+            if (res.ok) {
+              const posts = await res.json();
+              if (Array.isArray(posts)) {
+                allPosts.push(...posts);
+              }
+            }
+          } catch (e) {}
+        }
+
+        const favoritePosts = allPosts.filter(post => favorites.includes(post.id));
+
+        if (favoritePosts.length === 0) {
+          container.innerHTML = `
+            <div class="empty-favorites">
+              <span class="material-symbols-rounded">favorite_border</span>
+              <h2>Nessun preferito trovato</h2>
+              <p>I contenuti salvati potrebbero essere stati eliminati</p>
+              <a href="dashboard.html" class="btn-primary">
+                <span class="material-symbols-rounded">dashboard</span>
+                Vai alla Dashboard
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = '';
+        favoritePosts.sort((a,b) => (b.id || b.timestamp || 0) - (a.id || a.timestamp || 0));
+
+        favoritePosts.forEach(post => {
+          const card = document.createElement('div');
+          card.className = 'post-card';
+
+          let filesHTML = '';
+          if (Array.isArray(post.files) && post.files.length > 0) {
+            filesHTML = `<div class="post-files">` +
+              post.files.map(f => {
+                if (f.type?.startsWith('image/')) {
+                  return `<img src="${f.data}" alt="${f.name || 'image'}" loading="lazy">`;
+                }
+                return `<a href="${f.data}" download class="file-link">
+                  <span class="material-symbols-rounded">download</span>
+                  ${f.name || 'file'}
+                </a>`;
+              }).join('') +
+            `</div>`;
+          }
+
+          card.innerHTML = `
+            <div class="post-header">
+              <div class="post-author">
+                <div class="author-avatar">${(post.ownerName || 'U').charAt(0).toUpperCase()}</div>
+                <div class="author-info">
+                  <span class="author-name">${escapeHtml(post.ownerName || 'Utente')}</span>
+                  <span class="post-date">${formatDate(post.timestamp)}</span>
+                </div>
+              </div>
+              <button class="favorite-btn favorite-active" data-post-id="${post.id}" title="Rimuovi dai preferiti">
+                <span class="material-symbols-rounded">favorite</span>
+              </button>
+            </div>
+            <div class="post-content">
+              <h3 class="post-title">${escapeHtml(post.title || 'Senza titolo')}</h3>
+              <p class="post-text">${escapeHtml(post.text || post.desc || '')}</p>
+            </div>
+            ${filesHTML}
+            <div class="post-footer">
+              ${post.section ? `<span class="post-category">${formatCategory(post.section)}</span>` : ''}
+            </div>
+          `;
+
+          card.querySelector('.favorite-btn')?.addEventListener('click', function() {
+            const postId = post.id;
+            const index = favorites.indexOf(postId);
+            if (index > -1) {
+              favorites.splice(index, 1);
+              localStorage.setItem("favorites", JSON.stringify(favorites));
+              loadFavorites();
+            }
+          });
+
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error("Errore caricamento preferiti:", err);
+        container.innerHTML = `
+          <div class="empty-favorites">
+            <span class="material-symbols-rounded">error</span>
+            <h2>Errore nel caricamento</h2>
+            <p>Si è verificato un errore. Riprova più tardi.</p>
+          </div>
+        `;
+      }
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return 'Data sconosciuta';
+      const date = new Date(timestamp * 1000);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+
+      if (minutes < 60) return `${minutes} minuti fa`;
+      if (hours < 24) return `${hours} ore fa`;
+      if (days < 7) return `${days} giorni fa`;
+      return date.toLocaleDateString('it-IT');
+    }
+
+    function formatCategory(section) {
+      return section.replace(/_/g, ' ').replace(/,/g, ', ').replace(/\//g, ' › ');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+    }
+
+    loadFavorites();
+  </script>
+</body>
+</html>

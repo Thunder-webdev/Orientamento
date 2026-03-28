@@ -17,14 +17,14 @@
         <h2 id="modal-title">Accedi</h2>
         <button id="close-modal" class="close-modal">&times;</button>
       </div>
+      <input type="text" id="name" placeholder="Nome completo" style="display:none;" />
       <input type="text" id="email" placeholder="E-mail" />
       <input type="password" id="password" placeholder="Password" />
-      <div class="auth-buttons">
-        <button id="submit-btn">Accedi</button>
-      </div>
+      <button id="submit-btn" class="auth-btn">Accedi</button>
+      <div id="auth-toggle"></div>
     </div>
   </div>
-
+  
   <!-- Navbar -->
   <aside class="navbar" id="navbar">
     <header class="navbar-header">
@@ -64,7 +64,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
             </div>
-            <input type="text" class="search-input" id="searchInput" placeholder="Cerca settore..." autocomplete="off">
+            <input type="text" class="search-input" id="searchInput" placeholder="Cerca argomento..." autocomplete="off">
             <div class="icon-close" id="iconClose">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -118,42 +118,24 @@
 
 
   <!-- Main content -->
-  <div id="section-Info" class="section main-content"></div>
+  <div id="Info-section" class="section main-content"></div>
 
   <script src="../Javascript/script.js"></script>
   <script>
-fetch("Info_posts.json")
-    .then(res => res.json())
-    .then(posts => {
-        const div = document.getElementById("section-Info");
-        if(div) {
-            div.innerHTML = posts.map(p => `
-            <div class="post">
-                <h3>${p.title}</h3>
-                <p>${p.content}</p>
-            </div>`).join("");
-        }
-    })
-    .catch(err => console.error("Errore caricamento materia:", err));
-</script>
+    (function() {
+        const path = window.location.pathname.split("/").filter(Boolean);
 
+        const projectFolder = path[0];
 
-<script>
-(function() {
-    const path = window.location.pathname.split("/").filter(Boolean);
+        const scriptPath = "/" + projectFolder + "/Javascript/global.js";
 
-    const projectFolder = path[0];
+        const script = document.createElement("script");
+        script.src = scriptPath;
+        document.body.appendChild(script);
 
-    const scriptPath = "/" + projectFolder + "/Javascript/global.js";
-
-    const script = document.createElement("script");
-    script.src = scriptPath;
-    document.body.appendChild(script);
-
-    window.__BASE_URL = "/" + projectFolder + "/";
-})();
-</script>
-
+        window.__BASE_URL = "/" + projectFolder + "/";
+    })();
+  </script>
 
 </body>
 </html>
