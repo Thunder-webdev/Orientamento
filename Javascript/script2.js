@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const authToggle = document.getElementById('auth-toggle');
   const secondaryNav = document.querySelector('.secondary-nav');
 
+  const carousel = document.getElementById("carousel");
+  if (carousel) {
+    carousel.innerHTML += carousel.innerHTML;
+  }
+
   let teachers = JSON.parse(localStorage.getItem("teachers")) || [
     { email:"maurizio.minissale@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Minissale", role:"teacher" },
     { email:"rosita.artigliere@davincimilazzo.edu.it", password:"davinci2026", name:"Prof. Artigliere", role:"teacher" },
