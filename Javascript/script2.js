@@ -129,15 +129,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 function getUploadPath() {
-  return '/c/upload.html';
+  return './upload.html';
 }
 
 function getFavoritesPath() {
-  return '/c/favorites.html';
+  return './favorites.html';
 }
 
 function getHomePath() {
-  return '/c/Home.html';
+  return './Home.html';
 }
 
   document.getElementById("close-modal")?.addEventListener("click", () => {
