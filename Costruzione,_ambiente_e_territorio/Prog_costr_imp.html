@@ -76,18 +76,17 @@
 
     <div class="sectors-wrapper">
       <section class="sectors-grid" id="carousel">
-
           <a href="./Prog_costr_imp.html" class="sector-card cat">
             <div class="sector-info">
               <h2>Progettazione e costruzioni di impianti</h2>
-              <p>Progettazione e realizzazione di impianti industriali e civili.</p>
+              <p>Progettazione e realizzazione di impianti industriali <br> e civili.</p>
             </div>
           </a>
 
           <a href="./Geop_ecom_est.html" class="sector-card cat">
             <div class="sector-info">
               <h2>Geopedologia, Economia ed Estimo</h2>
-              <p>Studio del territorio, valutazioni economiche e catastali.</p>
+              <p>Studio del territorio, valutazioni economiche <br> e catastali.</p>
             </div>
           </a>
 
@@ -110,23 +109,7 @@
 
   <!-- Main content -->
   <div id="Prog_costr_imp-section" class="section main-content"></div>
-
   <script src="../Javascript/script.js"></script>
-  <script>
-    (function() {
-        const path = window.location.pathname.split("/").filter(Boolean);
-
-        const projectFolder = path[0];
-
-        const scriptPath = "/" + projectFolder + "/Javascript/global.js";
-
-        const script = document.createElement("script");
-        script.src = scriptPath;
-        document.body.appendChild(script);
-
-        window.__BASE_URL = "/" + projectFolder + "/";
-    })();
-  </script>
 
 </body>
 </html>

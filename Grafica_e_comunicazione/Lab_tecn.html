@@ -76,11 +76,10 @@
 
     <div class="sectors-wrapper">
       <section class="sectors-grid" id="carousel">
-
           <a href="../Grafica_e_comunicazione/Teor_com.html" class="sector-card grafica">
             <div class="sector-info">
               <h2>Teoria della comunicazione</h2>
-              <p>Principi della comunicazione e trasmissione dei messaggi.</p>
+              <p>Principi della comunicazione e trasmissione <br> dei messaggi.</p>
             </div>
           </a>
 
@@ -118,23 +117,7 @@
 
   <!-- Main content -->
   <div id="Lab_tecn-section" class="section main-content"></div>
-
   <script src="../Javascript/script.js"></script>
-  <script>
-    (function() {
-        const path = window.location.pathname.split("/").filter(Boolean);
-
-        const projectFolder = path[0];
-
-        const scriptPath = "/" + projectFolder + "/Javascript/global.js";
-
-        const script = document.createElement("script");
-        script.src = scriptPath;
-        document.body.appendChild(script);
-
-        window.__BASE_URL = "/" + projectFolder + "/";
-    })();
-  </script>
 
 </body>
 </html>

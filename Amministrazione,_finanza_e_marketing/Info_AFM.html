@@ -118,23 +118,7 @@
 
   <!-- Main content -->
   <div id="Info_AFM-section" class="section main-content"></div>
-
   <script src="../Javascript/script.js"></script>
-  <script>
-    (function() {
-        const path = window.location.pathname.split("/").filter(Boolean);
-
-        const projectFolder = path[0];
-
-        const scriptPath = "/" + projectFolder + "/Javascript/global.js";
-
-        const script = document.createElement("script");
-        script.src = scriptPath;
-        document.body.appendChild(script);
-
-        window.__BASE_URL = "/" + projectFolder + "/";
-    })();
-  </script>
 
 </body>
 </html>
