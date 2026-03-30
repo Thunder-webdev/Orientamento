@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // PROTEZIONE UPLOAD.HTML - Solo docenti registrati
+  if (window.location.pathname.includes('upload.html')) {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    
+    if (!currentUser || currentUser.role !== "teacher") {
+      alert("Accesso negato! Solo i docenti possono accedere a questa pagina.");
+      window.location.href = './Home.html';
+      return;
+    }
+  }
+
   const authModal = document.getElementById('auth-modal');
   const submitBtn = document.getElementById('submit-btn');
   const emailInput = document.getElementById('email');
