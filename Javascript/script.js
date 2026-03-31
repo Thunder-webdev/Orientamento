@@ -10,7 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const carousel = document.getElementById("carousel");
   if (carousel) {
-    carousel.innerHTML += carousel.innerHTML;
+    const items = Array.from(carousel.children);
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      clone.classList.add('is-clone');
+      carousel.appendChild(clone);
+    });
   }
 
   let teachers = JSON.parse(localStorage.getItem("teachers")) || [
@@ -476,9 +481,15 @@ searchInput.addEventListener('input', (e) => {
 
 function filterSectors(term) {
     sectorCards.forEach(card => {
+        const isClone = card.classList.contains('is-clone');
         const title = card.querySelector('h2').innerText.toLowerCase();
         const description = card.querySelector('p').innerText.toLowerCase();
-        
+
+        if (term !== '' && isClone) {
+            card.style.display = "none";
+            return;
+        }
+
         if (title.includes(term) || description.includes(term)) {
             card.style.display = "flex";
         } else {

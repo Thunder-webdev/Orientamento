@@ -10,23 +10,25 @@
 </head>
 <body>
 
+  <!-- Auth Modal -->
   <div id="auth-modal" class="auth-modal" style="display:none;">
     <div class="auth-modal-content">
       <div class="modal-header">
         <h2 id="modal-title">Accedi</h2>
         <button id="close-modal" class="close-modal">&times;</button>
       </div>
+      <input type="text" id="name" placeholder="Nome completo" style="display:none;" />
       <input type="text" id="email" placeholder="E-mail" />
       <input type="password" id="password" placeholder="Password" />
-      <div class="auth-buttons">
-        <button id="submit-btn">Accedi</button>
-      </div>
+      <button id="submit-btn" class="auth-btn">Accedi</button>
+      <div id="auth-toggle"></div>
     </div>
   </div>
 
+  <!-- Navbar -->
   <aside class="navbar" id="navbar">
     <header class="navbar-header">
-      <img src="images/logo.jpg" alt="Logo" class="logo"/>
+      <img src="./images/logo.jpg" alt="Logo" class="logo"/>
       <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
     </header>
     <nav class="navbar-nav">
@@ -38,7 +40,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="dashboard.html" class="nav-link">
+          <a href="./dashboard.html" class="nav-link">
             <span class="material-symbols-rounded">dashboard</span>
             <span class="nav-label">Dashboard</span>
           </a>

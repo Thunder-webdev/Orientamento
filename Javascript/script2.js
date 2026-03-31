@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const carousel = document.getElementById("carousel");
   if (carousel) {
-    carousel.innerHTML += carousel.innerHTML;
+    const items = Array.from(carousel.children);
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      clone.classList.add('is-clone');
+      carousel.appendChild(clone);
+    });
   }
 
   let teachers = JSON.parse(localStorage.getItem("teachers")) || [
@@ -413,6 +418,57 @@ function getHomePath() {
       .replace(/'/g,'&#039;');
   }
 
+  const searchInput = document.getElementById('searchInput');
+  const iconClose = document.getElementById('iconClose');
+  const sectorCards = document.querySelectorAll('.sector-card');
+
+  iconClose.addEventListener('click', () => {
+      searchInput.value = '';
+      filterSectors('');
+      filterPosts('');
+      searchInput.focus(); 
+  });
+
+  searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      filterSectors(searchTerm);
+      filterPosts(searchTerm);
+  });
+
+  function filterSectors(term) {
+      sectorCards.forEach(card => {
+          const isClone = card.classList.contains('is-clone');
+          const title = card.querySelector('h2').innerText.toLowerCase();
+          const description = card.querySelector('p').innerText.toLowerCase();
+
+          if (term !== '' && isClone) {
+              card.style.display = "none";
+              return;
+          }
+
+          if (title.includes(term) || description.includes(term)) {
+              card.style.display = "flex";
+          } else {
+              card.style.display = "none";
+          }
+      });
+  }
+
+  function filterPosts(term) {
+      const postCards = document.querySelectorAll('.post-card');
+
+      postCards.forEach(card => {
+          const title = card.querySelector('.post-title')?.innerText.toLowerCase() || '';
+          const description = card.querySelector('.post-text')?.innerText.toLowerCase() || '';
+          
+          if (title.includes(term) || description.includes(term)) {
+              card.style.display = "block";
+          } else {
+              card.style.display = "none";
+          }
+      });
+  }
+
   updateSidebar();
   showPosts();
 });
@@ -464,49 +520,3 @@ function getHomePath() {
     alert("Errore durante l'upload!");
   }
 });
-
-const searchInput = document.getElementById('searchInput');
-const iconClose = document.getElementById('iconClose');
-const sectorCards = document.querySelectorAll('.sector-card');
-const postCards = document.querySelectorAll('.post-card');
-
-iconClose.addEventListener('click', () => {
-    searchInput.value = '';
-    filterSectors('');
-    filterPosts('');
-    searchInput.focus(); 
-});
-
-searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    filterSectors(searchTerm);
-    filterPosts(searchTerm);
-});
-
-function filterSectors(term) {
-    sectorCards.forEach(card => {
-        const title = card.querySelector('h2').innerText.toLowerCase();
-        const description = card.querySelector('p').innerText.toLowerCase();
-        
-        if (title.includes(term) || description.includes(term)) {
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
-        }
-    });
-}
-
-function filterPosts(term) {
-    const postCards = document.querySelectorAll('.post-card');
-
-    postCards.forEach(card => {
-        const title = card.querySelector('.post-title')?.innerText.toLowerCase() || '';
-        const description = card.querySelector('.post-text')?.innerText.toLowerCase() || '';
-        
-        if (title.includes(term) || description.includes(term)) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
-    });
-}
