@@ -90,6 +90,10 @@ body {
   cursor: pointer;
 }
 
+.sidebar.open-mobile .sidebar-nav {
+  display: flex !important;
+}
+
 /* ================= SECTORS ================= */
 .sectors-grid {
   max-height: 1200px;

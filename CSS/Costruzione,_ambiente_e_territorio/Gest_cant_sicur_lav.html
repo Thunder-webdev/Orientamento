@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orientamento - StudyNow</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/png">
+  <link rel="stylesheet" href="../CSS/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body data-posts-path="Gest_cant_sicur_lav_posts.json">
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="auth-modal" style="display:none;">
+    <div class="auth-modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Accedi</h2>
+        <button id="close-modal" class="close-modal">&times;</button>
+      </div>
+      <input type="text" id="name" placeholder="Nome completo" style="display:none;" />
+      <input type="text" id="email" placeholder="E-mail" />
+      <input type="password" id="password" placeholder="Password" />
+      <button id="submit-btn" class="auth-btn">Accedi</button>
+      <div id="auth-toggle"></div>
+    </div>
+  </div>
+  
+  <!-- Navbar -->
+  <aside class="navbar" id="navbar">
+    <header class="navbar-header">
+      <img src="../images/logo.jpg" alt="Logo" class="logo"/>
+      <span class="mobile-toggle" id="mobile-toggle">&#9776;</span>
+    </header>
+    <nav class="navbar-nav">
+      <ul class="nav-list primary-nav">
+        <li class="nav-item">
+          <a href="../Home.html" class="nav-link">
+            <span class="material-symbols-rounded">home</span>
+            <span class="nav-label">Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="../dashboard.html" class="nav-link">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span class="nav-label">Dashboard CAT</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-list secondary-nav" style="margin-top:auto;"></ul>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="main-header">
+      <div class="header-titles">
+          <h1>Gestione Cantiere e Sicurezza dell'ambiente di lavoro</h1>
+          <p class="subtitle">Inizia ora a visualizzare alcuni dei post caricati</p>
+      </div>
+      <div class="search-wrapper" id="searchWrapper">
+        <div class="search-content">
+           <div class="icon-search">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Cerca argomento..." autocomplete="off">
+            <div class="icon-close" id="iconClose">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sectors-wrapper">
+      <section class="sectors-grid" id="carousel">
+          <a href="./Prog_costr_imp.html" class="sector-card cat">
+            <div class="sector-info">
+              <h2>Progettazione e costruzioni di impianti</h2>
+              <p>Progettazione e realizzazione di impianti industriali <br> e civili.</p>
+            </div>
+          </a>
+
+          <a href="./Geop_ecom_est.html" class="sector-card cat">
+            <div class="sector-info">
+              <h2>Geopedologia, Economia ed Estimo</h2>
+              <p>Studio del territorio, valutazioni economiche <br> e catastali.</p>
+            </div>
+          </a>
+
+          <a href="./Topo.html" class="sector-card cat">
+            <div class="sector-info">
+              <h2>Topografia</h2>
+              <p>Rilievi e mappe precise per progetti e costruzioni.</p>
+            </div>
+          </a>
+
+          <a href="./Gest_cant_sicur_lav.html" class="sector-card cat">
+            <div class="sector-info">
+              <h2>Gestione Cantiere e <br> Sicurezza dell'ambiente di lavoro</h2>
+              <p>Organizzazione dei cantieri e sicurezza sul lavoro.</p>
+            </div>
+          </a>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Main content -->
+  <div id="Gest_cant_sicur_lav-section" class="section main-content"></div>
+  <script src="../Javascript/script.js"></script>
+
+</body>
+</html>
