@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // PROTEZIONE UPLOAD.HTML - Solo docenti registrati
+
   if (window.location.pathname.includes('upload.html')) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     
