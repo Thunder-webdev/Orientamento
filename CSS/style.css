@@ -83,6 +83,99 @@ body {
   color: #fff;
 }
 
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: #151A2D;
+  color: #fff;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px;
+}
+
+.sidebar-header img {
+  width: 46px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sidebar .nav-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-list ul {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+  width: 160%;
+}
+
+/* Dropdown subjects */
+.subjects-dropdown {
+  position: relative;
+}
+
+.subjects-dropdown .dropdown-menu {
+  display: none;
+  flex-direction: column;
+  background: #1e1e2f;
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  margin: 8px 0 8px 11px;
+  max-width: calc(100% - 22px);
+  overflow: hidden;
+}
+
+.subjects-dropdown.open .dropdown-menu {
+  display: flex;
+}
+
+.subjects-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.subjects-dropdown .dropdown-item:hover {
+  background: #fff;
+  color: #1e1e2f;
+}
+
+.subjects-dropdown .dropdown-toggle::after {
+  content: '▼';
+  display: inline-block;
+  margin-left: 0.5rem;
+  transition: transform 0.3s;
+}
+
+.subjects-dropdown.open .dropdown-toggle::after {
+  transform: rotate(-180deg);
+}
+
 /* ================= HAMBURGER ================= */
 .mobile-toggle {
   display: none;
@@ -153,6 +246,13 @@ body {
 .trasporti {background:linear-gradient(135deg,#223B82);}
 
 /* Main content */
+.post-zone {
+  background-color: #dfdfdf;
+  margin: 0 10% 5% 10%;
+  border-radius: 20px;
+  display: flex;
+}
+
 .main-content h1 {
   padding: 20px 0 0 20px;
   flex: 1;

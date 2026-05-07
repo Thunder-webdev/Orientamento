@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const nameInput = document.getElementById('name');
   const modalTitle = document.getElementById('modal-title');
   const authToggle = document.getElementById('auth-toggle');
+  const subjectsDropdown = document.getElementById('subjects-dropdown');
+  const subjectsToggle = document.getElementById('subjects-toggle');
   const secondaryNav = document.querySelector('.secondary-nav');
 
   const carousel = document.getElementById("carousel");
@@ -211,6 +213,11 @@ function getHomePath() {
       showPosts();
     }
   });
+  
+    subjectsToggle?.addEventListener("click", e => {
+      e.preventDefault();
+      subjectsDropdown?.classList.toggle("open");
+    });
 
   function detectContext() {
     const body = document.body;
