@@ -116,45 +116,6 @@
     </div>
   </main>
 
-
-  <!-- Main content -->
-  <div class="post-zone">
-      <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-
-          <nav class="sidebar-nav">
-            <ul class="nav-list primary-nav">
-              <li class="nav-item dropdown subjects-dropdown" id="settori-dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="settori-toggle">
-                  <span class="material-symbols-rounded">menu_book</span>
-                  <span class="nav-label">Settori</span>
-                </a>
-                <ul class="dropdown-menu" id="subjects-menu">
-                  <li><a href="..\Amministrazione,_finanza_e_marketing\Dashboard_Afm.html" class="dropdown-item">Amministrazione, finanza e marketing</a></li>
-                  <li><a href="..\Turismo\Dashboard_Tur.html" class="dropdown-item">Turismo</a></li>
-                  <li><a href="..\Costruzione,_ambiente_e_territorio/Dashboard_Cat.html" class="dropdown-item">Costruzione, ambiente e territorio</a></li>
-                  <li><a href="#" class="dropdown-item">Informatica e Telecomunicazioni</a></li>
-                  <li><a href="..\Grafica_e_comunicazione/Dashboard_Graf.html" class="dropdown-item">Grafica e comunicazione</a></li>
-                  <li><a href="..\Trasporti_e_logistica\Dashboard_Trasp_Logi.html" class="dropdown-item">Trasporti e logistica</a></li>
-                </ul>
-              </li>
-
-              <li class="nav-item dropdown subjects-dropdown" id="materie-dropdown">
-                <a href="" class="nav-link dropdown-toggle" id="materie-toggle">
-                  <span class="material-symbols-rounded">menu_book</span>
-                  <span class="nav-label">Materie</span>
-                </a>
-                <ul class="dropdown-menu" id="subjects-menu">
-                  <li><a href="./Sist_Reti.html" class="dropdown-item">Sistemi e reti</a></li>
-                  <li><a href="./Tpsi.html" class="dropdown-item">Tpsi</a></li>
-                  <li><a href="./Gest_prog.html" class="dropdown-item">Gestione progetto, organizzazione d'impresa</a></li>
-                  <li><a href="./Info.html" class="dropdown-item">Informatica</a></li>
-                  <li><a href="./Telec.html" class="dropdown-item">Telecomunicazioni</a></li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
-        </aside>
   <!-- Main content -->
   <div class="post-zone">
       <!-- Sidebar -->
@@ -188,12 +149,22 @@
                   <li><a href="./Gest_prog.html" class="dropdown-item">Gestione progetto, organizzazione d'impresa</a></li>
                   <li><a href="./Info.html" class="dropdown-item">Informatica</a></li>
                   <li><a href="#" class="dropdown-item">Telecomunicazioni</a></li>
-                </ul>
               </li>
             </ul>
           </nav>
         </aside>
-      <div id="Telec-section" class="section main-content"></div>
+      
+      <div class="post-section">
+        <div class="postsection-header">
+          <div class="post-controls">
+            <button onclick="setLayout(1)" id="btn-1"><span class="material-symbols-rounded">crop_9_16</span></button>
+            <button onclick="setLayout(2)" id="btn-2"><span class="material-symbols-rounded">view_column_2</span></button>
+            <button onclick="setLayout(3)" id="btn-3"><span class="material-symbols-rounded">view_column</span></button>
+          </div>
+        </div>
+      
+        <div id="Telec-section" class="section main-content"></div>
+      </div>
     </div>
   <script src="../Javascript/script.js"></script>
 

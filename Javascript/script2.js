@@ -527,3 +527,24 @@ function getHomePath() {
     alert("Errore durante l'upload!");
   }
 });
+
+function setLayout(cols) {
+  const container = document.getElementById("dashboard-section");
+  if (!container) return;
+
+  container.classList.remove("layout-1", "layout-2", "layout-3");
+  container.classList.add(`layout-${cols}`);
+
+  localStorage.setItem("layout", cols);
+
+  document.querySelectorAll(".post-controls button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  document.getElementById(`btn-${cols}`)?.classList.add("active");
+}
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("layout") || 2;
+  setLayout(saved);
+});
