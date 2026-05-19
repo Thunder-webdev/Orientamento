@@ -386,7 +386,7 @@ body {
   color: white;
 }
 
-#dashboard-section {
+[id$="-section"] {
   display: grid;
   gap: 15px;
   width: 100%;
